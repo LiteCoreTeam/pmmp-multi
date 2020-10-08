@@ -336,7 +336,7 @@ class McRegion extends BaseLevelProvider{
 	 * @return RegionLoader|null
 	 */
 	protected function getRegion(int $regionX, int $regionZ){
-		return $this->regions[Level::chunkHash($regionX, $regionZ)] ?? null;
+		return $this->regions[((($regionX) & 0xFFFFFFFF) << 32) | (( $regionZ) & 0xFFFFFFFF)] ?? null;
 	}
 
 	/**
@@ -350,7 +350,7 @@ class McRegion extends BaseLevelProvider{
 	 * @return void
 	 */
 	protected function loadRegion(int $regionX, int $regionZ){
-		if(!isset($this->regions[$index = Level::chunkHash($regionX, $regionZ)])){
+		if(!isset($this->regions[$index = ((($regionX) & 0xFFFFFFFF) << 32) | (( $regionZ) & 0xFFFFFFFF)])){
 			$path = $this->pathToRegion($regionX, $regionZ);
 
 			$region = new RegionLoader($path, $regionX, $regionZ);

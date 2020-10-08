@@ -97,11 +97,11 @@ class RCONInstance extends Thread{
 	 * @return int|false
 	 */
 	private function writePacket($client, int $requestID, int $packetType, string $payload){
-		$pk = Binary::writeLInt($requestID)
-			. Binary::writeLInt($packetType)
+		$pk = (\pack("V", $requestID))
+			. (\pack("V", $packetType))
 			. $payload
 			. "\x00\x00"; //Terminate payload and packet
-		return socket_write($client, Binary::writeLInt(strlen($pk)) . $pk);
+		return socket_write($client, (\pack("V", strlen($pk))) . $pk);
 	}
 
 	/**
@@ -129,7 +129,7 @@ class RCONInstance extends Thread{
 			}
 			return false;
 		}
-		$size = Binary::readLInt($d);
+		$size = (\unpack("V", $d)[1] << 32 >> 32);
 		if($size < 0 or $size > 65535){
 			$this->logger->debug("Packet with too-large length header $size from $ip $port, disconnecting");
 			return false;
@@ -146,8 +146,8 @@ class RCONInstance extends Thread{
 			$this->logger->debug("Truncated packet from $ip $port (want $size bytes, have " . strlen($buf) . "), disconnecting");
 			return false;
 		}
-		$requestID = Binary::readLInt(substr($buf, 0, 4));
-		$packetType = Binary::readLInt(substr($buf, 4, 4));
+		$requestID = (\unpack("V", substr($buf, 0, 4))[1] << 32 >> 32);
+		$packetType = (\unpack("V", substr($buf, 4, 4))[1] << 32 >> 32);
 		$payload = substr($buf, 8, -2); //Strip two null bytes
 		return true;
 	}

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -65,13 +65,13 @@ class EmotePacket extends DataPacket/* implements ClientboundPacket, Serverbound
 	protected function decodePayload() : void{
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		$this->emoteId = $this->getString();
-		$this->flags = $this->getByte();
+		$this->flags = (\ord($this->get(1)));
 	}
 
 	protected function encodePayload() : void{
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		$this->putString($this->emoteId);
-		$this->putByte($this->flags);
+		($this->buffer .= \chr($this->flags));
 	}
 
 	public function handle(NetworkSession $handler) : bool{

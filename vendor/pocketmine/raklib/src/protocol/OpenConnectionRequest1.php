@@ -19,7 +19,6 @@ namespace raklib\protocol;
 
 use pocketmine\utils\Binary;
 
-
 use raklib\RakLib;
 use function str_pad;
 use function strlen;

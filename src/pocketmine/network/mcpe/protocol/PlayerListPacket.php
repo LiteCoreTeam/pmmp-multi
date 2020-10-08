@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\types\PlayerListEntry;
@@ -46,7 +46,7 @@ class PlayerListPacket extends DataPacket{
 	}
 
 	protected function decodePayload(){
-		$this->type = $this->getByte();
+		$this->type = (\ord($this->get(1)));
 		$count = $this->getUnsignedVarInt();
 		for($i = 0; $i < $count; ++$i){
 			$entry = new PlayerListEntry();
@@ -57,10 +57,10 @@ class PlayerListPacket extends DataPacket{
 				$entry->username = $this->getString();
 				$entry->xboxUserId = $this->getString();
 				$entry->platformChatId = $this->getString();
-				$entry->buildPlatform = $this->getLInt();
+				$entry->buildPlatform = ((\unpack("V", $this->get(4))[1] << 32 >> 32));
 				$entry->skinData = $this->getSkin();
-				$entry->isTeacher = $this->getBool();
-				$entry->isHost = $this->getBool();
+				$entry->isTeacher = (($this->get(1) !== "\x00"));
+				$entry->isHost = (($this->get(1) !== "\x00"));
 			}else{
 				$entry->uuid = $this->getUUID();
 			}
@@ -69,13 +69,13 @@ class PlayerListPacket extends DataPacket{
 		}
 		if($this->type === self::TYPE_ADD){
 			for($i = 0; $i < $count; ++$i){
-				$this->entries[$i]->skinData->setVerified($this->getBool());
+				$this->entries[$i]->skinData->setVerified((($this->get(1) !== "\x00")));
 			}
 		}
 	}
 
 	protected function encodePayload(){
-		$this->putByte($this->type);
+		($this->buffer .= \chr($this->type));
 		$this->putUnsignedVarInt(count($this->entries));
 		foreach($this->entries as $entry){
 			if($this->type === self::TYPE_ADD){
@@ -84,17 +84,17 @@ class PlayerListPacket extends DataPacket{
 				$this->putString($entry->username);
 				$this->putString($entry->xboxUserId);
 				$this->putString($entry->platformChatId);
-				$this->putLInt($entry->buildPlatform);
+				($this->buffer .= (\pack("V", $entry->buildPlatform)));
 				$this->putSkin($entry->skinData);
-				$this->putBool($entry->isTeacher);
-				$this->putBool($entry->isHost);
+				($this->buffer .= ($entry->isTeacher ? "\x01" : "\x00"));
+				($this->buffer .= ($entry->isHost ? "\x01" : "\x00"));
 			}else{
 				$this->putUUID($entry->uuid);
 			}
 		}
 		if($this->type === self::TYPE_ADD){
 			foreach($this->entries as $entry){
-				$this->putBool($entry->skinData->isVerified());
+				($this->buffer .= ($entry->skinData->isVerified() ? "\x01" : "\x00"));
 			}
 		}
 	}

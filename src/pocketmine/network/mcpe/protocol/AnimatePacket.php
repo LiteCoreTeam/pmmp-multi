@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -49,7 +49,7 @@ class AnimatePacket extends DataPacket{
 		$this->action = $this->getVarInt();
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
 		if(($this->action & 0x80) !== 0){
-			$this->float = $this->getLFloat();
+			$this->float = ((\unpack("g", $this->get(4))[1]));
 		}
 	}
 
@@ -57,7 +57,7 @@ class AnimatePacket extends DataPacket{
 		$this->putVarInt($this->action);
 		$this->putEntityRuntimeId($this->entityRuntimeId);
 		if(($this->action & 0x80) !== 0){
-			$this->putLFloat($this->float);
+			($this->buffer .= (\pack("g", $this->float)));
 		}
 	}
 

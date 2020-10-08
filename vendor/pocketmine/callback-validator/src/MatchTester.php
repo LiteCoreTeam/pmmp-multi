@@ -11,6 +11,7 @@ final class MatchTester
 
     /**
      * Lookup table of all built-in types
+     * @var true[]
      */
     private static $builtInTypes = [
         BuiltInTypes::STRING   => true,
@@ -25,6 +26,7 @@ final class MatchTester
 
     /**
      * Lookup table of scalar types
+     * @var true[]
      */
     private static $scalarTypes = [
         BuiltInTypes::STRING => true,

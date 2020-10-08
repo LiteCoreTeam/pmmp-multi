@@ -252,7 +252,6 @@ class Session{
 			}
 		}
 
-
 		foreach($this->recoveryQueue as $seq => $pk){
 			if($pk->sendTime < (time() - 8)){
 				$this->packetToSend[] = $pk;
@@ -312,10 +311,6 @@ class Session{
 		$this->queueConnectedPacket($pk, $reliability, 0, RakLib::PRIORITY_IMMEDIATE);
 	}
 
-	/**
-	 * @param EncapsulatedPacket $pk
-	 * @param int                $flags
-	 */
 	private function addToQueue(EncapsulatedPacket $pk, int $flags = RakLib::PRIORITY_NORMAL) : void{
 		$priority = $flags & 0b00000111;
 		if($pk->needACK and $pk->messageIndex !== null){
@@ -340,10 +335,6 @@ class Session{
 		}
 	}
 
-	/**
-	 * @param EncapsulatedPacket $packet
-	 * @param int                $flags
-	 */
 	public function addEncapsulatedToQueue(EncapsulatedPacket $packet, int $flags = RakLib::PRIORITY_NORMAL) : void{
 
 		if(($packet->needACK = ($flags & RakLib::FLAG_NEED_ACK) > 0) === true){
@@ -395,8 +386,6 @@ class Session{
 
 	/**
 	 * Processes a split part of an encapsulated packet.
-	 *
-	 * @param EncapsulatedPacket $packet
 	 *
 	 * @return null|EncapsulatedPacket Reassembled packet if we have all the parts, null otherwise.
 	 */
@@ -465,8 +454,10 @@ class Session{
 			}
 		}
 
-		if($packet->hasSplit and ($packet = $this->handleSplit($packet)) === null){
-			return;
+		if($packet->hasSplit){
+			if(($packet = $this->handleSplit($packet)) === null){
+				return;
+			}
 		}
 
 		if(PacketReliability::isSequencedOrOrdered($packet->reliability) and ($packet->orderChannel < 0 or $packet->orderChannel >= self::CHANNEL_COUNT)){
@@ -510,7 +501,6 @@ class Session{
 			$this->handleEncapsulatedPacketRoute($packet);
 		}
 	}
-
 
 	private function handleEncapsulatedPacketRoute(EncapsulatedPacket $packet) : void{
 		if($this->sessionManager === null){
@@ -567,7 +557,6 @@ class Session{
 	}
 
 	/**
-	 * @param int $sendPingTime
 	 * @param int $sendPongTime TODO: clock differential stuff
 	 */
 	private function handlePong(int $sendPingTime, int $sendPongTime) : void{

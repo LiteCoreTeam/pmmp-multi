@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
@@ -95,9 +95,9 @@ class AddPlayerPacket extends DataPacket{
 		$this->platformChatId = $this->getString();
 		$this->position = $this->getVector3();
 		$this->motion = $this->getVector3();
-		$this->pitch = $this->getLFloat();
-		$this->yaw = $this->getLFloat();
-		$this->headYaw = $this->getLFloat();
+		$this->pitch = ((\unpack("g", $this->get(4))[1]));
+		$this->yaw = ((\unpack("g", $this->get(4))[1]));
+		$this->headYaw = ((\unpack("g", $this->get(4))[1]));
 		$this->item = $this->getSlot();
 		$this->metadata = $this->getEntityMetadata();
 
@@ -107,7 +107,7 @@ class AddPlayerPacket extends DataPacket{
 		$this->uvarint4 = $this->getUnsignedVarInt();
 		$this->uvarint5 = $this->getUnsignedVarInt();
 
-		$this->long1 = $this->getLLong();
+		$this->long1 = (Binary::readLLong($this->get(8)));
 
 		$linkCount = $this->getUnsignedVarInt();
 		for($i = 0; $i < $linkCount; ++$i){
@@ -115,7 +115,7 @@ class AddPlayerPacket extends DataPacket{
 		}
 
 		$this->deviceId = $this->getString();
-		$this->buildPlatform = $this->getLInt();
+		$this->buildPlatform = ((\unpack("V", $this->get(4))[1] << 32 >> 32));
 	}
 
 	protected function encodePayload(){
@@ -126,9 +126,9 @@ class AddPlayerPacket extends DataPacket{
 		$this->putString($this->platformChatId);
 		$this->putVector3($this->position);
 		$this->putVector3Nullable($this->motion);
-		$this->putLFloat($this->pitch);
-		$this->putLFloat($this->yaw);
-		$this->putLFloat($this->headYaw ?? $this->yaw);
+		($this->buffer .= (\pack("g", $this->pitch)));
+		($this->buffer .= (\pack("g", $this->yaw)));
+		($this->buffer .= (\pack("g", $this->headYaw ?? $this->yaw)));
 		$this->putSlot($this->item);
 		$this->putEntityMetadata($this->metadata);
 
@@ -138,7 +138,7 @@ class AddPlayerPacket extends DataPacket{
 		$this->putUnsignedVarInt($this->uvarint4);
 		$this->putUnsignedVarInt($this->uvarint5);
 
-		$this->putLLong($this->long1);
+		($this->buffer .= (\pack("VV", $this->long1 & 0xFFFFFFFF, $this->long1 >> 32)));
 
 		$this->putUnsignedVarInt(count($this->links));
 		foreach($this->links as $link){
@@ -146,7 +146,7 @@ class AddPlayerPacket extends DataPacket{
 		}
 
 		$this->putString($this->deviceId);
-		$this->putLInt($this->buildPlatform);
+		($this->buffer .= (\pack("V", $this->buildPlatform)));
 	}
 
 	public function handle(NetworkSession $session) : bool{

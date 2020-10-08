@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944
+class ComposerStaticInit06bfa9b641350e0210531caa7bb28a33
 {
     public static $files = array (
         '44f761fde233c98b53686bd6223104dd' => __DIR__ . '/../..' . '/src/pocketmine/CoreConstants.php',
@@ -1179,6 +1179,7 @@ class ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944
         'pocketmine\\utils\\ServerKiller' => __DIR__ . '/../..' . '/src/pocketmine/utils/ServerKiller.php',
         'pocketmine\\utils\\Terminal' => __DIR__ . '/../..' . '/src/pocketmine/utils/Terminal.php',
         'pocketmine\\utils\\TextFormat' => __DIR__ . '/../..' . '/src/pocketmine/utils/TextFormat.php',
+        'pocketmine\\utils\\TextFormatJsonObject' => __DIR__ . '/../..' . '/src/pocketmine/utils/TextFormatJsonObject.php',
         'pocketmine\\utils\\Timezone' => __DIR__ . '/../..' . '/src/pocketmine/utils/Timezone.php',
         'pocketmine\\utils\\UUID' => __DIR__ . '/../..' . '/src/pocketmine/utils/UUID.php',
         'pocketmine\\utils\\Utils' => __DIR__ . '/../..' . '/src/pocketmine/utils/Utils.php',
@@ -1222,10 +1223,10 @@ class ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944::$fallbackDirsPsr4;
-            $loader->classMap = ComposerStaticInitc2ce08d595367b8f0c883b7ae1c3a944::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit06bfa9b641350e0210531caa7bb28a33::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit06bfa9b641350e0210531caa7bb28a33::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit06bfa9b641350e0210531caa7bb28a33::$fallbackDirsPsr4;
+            $loader->classMap = ComposerStaticInit06bfa9b641350e0210531caa7bb28a33::$classMap;
 
         }, null, ClassLoader::class);
     }

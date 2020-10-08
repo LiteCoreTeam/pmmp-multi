@@ -1107,6 +1107,7 @@ return array(
     'pocketmine\\utils\\ServerKiller' => $baseDir . '/src/pocketmine/utils/ServerKiller.php',
     'pocketmine\\utils\\Terminal' => $baseDir . '/src/pocketmine/utils/Terminal.php',
     'pocketmine\\utils\\TextFormat' => $baseDir . '/src/pocketmine/utils/TextFormat.php',
+    'pocketmine\\utils\\TextFormatJsonObject' => $baseDir . '/src/pocketmine/utils/TextFormatJsonObject.php',
     'pocketmine\\utils\\Timezone' => $baseDir . '/src/pocketmine/utils/Timezone.php',
     'pocketmine\\utils\\UUID' => $baseDir . '/src/pocketmine/utils/UUID.php',
     'pocketmine\\utils\\Utils' => $baseDir . '/src/pocketmine/utils/Utils.php',

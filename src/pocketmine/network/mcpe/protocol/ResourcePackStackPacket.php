@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\resourcepacks\ResourcePack;
@@ -46,7 +46,7 @@ class ResourcePackStackPacket extends DataPacket{
 	public $baseGameVersion = ProtocolInfo::MINECRAFT_VERSION_NETWORK;
 
 	protected function decodePayload(){
-		$this->mustAccept = $this->getBool();
+		$this->mustAccept = (($this->get(1) !== "\x00"));
 		$behaviorPackCount = $this->getUnsignedVarInt();
 		while($behaviorPackCount-- > 0){
 			$this->getString();
@@ -61,12 +61,12 @@ class ResourcePackStackPacket extends DataPacket{
 			$this->getString();
 		}
 
-		$this->isExperimental = $this->getBool();
+		$this->isExperimental = (($this->get(1) !== "\x00"));
 		$this->baseGameVersion = $this->getString();
 	}
 
 	protected function encodePayload(){
-		$this->putBool($this->mustAccept);
+		($this->buffer .= ($this->mustAccept ? "\x01" : "\x00"));
 
 		$this->putUnsignedVarInt(count($this->behaviorPackStack));
 		foreach($this->behaviorPackStack as $entry){
@@ -82,7 +82,7 @@ class ResourcePackStackPacket extends DataPacket{
 			$this->putString(""); //TODO: subpack name
 		}
 
-		$this->putBool($this->isExperimental);
+		($this->buffer .= ($this->isExperimental ? "\x01" : "\x00"));
 		$this->putString($this->baseGameVersion);
 	}
 

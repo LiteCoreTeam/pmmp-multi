@@ -1,6 +1,11 @@
 parameters:
 	level: 8
+	treatPhpDocTypesAsCertain: false
 	paths:
 		- src
 	ignoreErrors:
-		- "#^Default value of the parameter \\#\\d+ \\$[A-Za-z\\d_]+ \\(\\-?\\d+\\) of method .+\\(\\) is incompatible with type float\\.$#"
+		-
+			#bug with treatPhpDocTypesAsCertain + strict-rules
+			message: "#^Casting to int something that's already int\\.$#"
+			count: 1
+			path: src/Matrix.php

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -53,13 +53,13 @@ class CompletedUsingItemPacket extends DataPacket{
 	public $action;
 
 	public function decodePayload() : void{
-		$this->itemId = $this->getShort();
-		$this->action = $this->getLInt();
+		$this->itemId = ((\unpack("n", $this->get(2))[1]));
+		$this->action = ((\unpack("V", $this->get(4))[1] << 32 >> 32));
 	}
 
 	public function encodePayload() : void{
-		$this->putShort($this->itemId);
-		$this->putLInt($this->action);
+		($this->buffer .= (\pack("n", $this->itemId)));
+		($this->buffer .= (\pack("V", $this->action)));
 	}
 
 	public function handle(NetworkSession $session) : bool{

@@ -38,11 +38,13 @@ final class CallbackType
             return new \ReflectionMethod($target, '__invoke');
         }
 
-        $target = (string)$target;
+        if (\is_string($target)) {
+            return \strpos($target, '::') !== false
+                ? new \ReflectionMethod($target)
+                : new \ReflectionFunction($target);
+        }
 
-        return \strpos($target, '::') !== false
-            ? new \ReflectionMethod($target)
-            : new \ReflectionFunction($target);
+        throw new \UnexpectedValueException("Unknown callable type");
     }
 
     /**
@@ -91,9 +93,11 @@ final class CallbackType
         $byRef = $candidate->returnsReference();
         $returnType = $candidate->getReturnType();
 
-        if ($returnType !== null) {
-            $typeName = (string)$returnType;
+        if ($returnType instanceof \ReflectionNamedType) {
+            $typeName = $returnType->getName();
             $nullable = $returnType->allowsNull();
+        } elseif ($returnType !== null) {
+            throw new \LogicException("Unsupported reflection type " . get_class($returnType));
         } else {
             $typeName = null;
             $nullable = false;
@@ -108,10 +112,11 @@ final class CallbackType
         foreach ($candidate->getParameters() as $position => $parameter) {
             $byRef = $parameter->isPassedByReference();
 
-            if ($parameter->hasType()) {
-                $type = $parameter->getType();
-                $typeName = (string)$type;
+            if (($type = $parameter->getType()) instanceof \ReflectionNamedType) {
+                $typeName = $type->getName();
                 $nullable = $type->allowsNull();
+            } elseif ($type !== null) {
+                throw new \LogicException("Unsupported reflection type " . get_class($type));
             } else {
                 $typeName = null;
                 $nullable = false;
@@ -154,10 +159,12 @@ final class CallbackType
 
         $string .= '( ';
 
-        for ($i = $o = 0, $l = count($this->parameters) - 1; $i < $l; $i++) {
+        $i = $o = 0;
+        $l = count($this->parameters) - 1;
+        for (; $i < $l; $i++) {
             $string .= $this->parameters[$i];
 
-            if (!$o && !($this->parameters[$i + 1]->isOptional)) {
+            if ($o === 0 && !($this->parameters[$i + 1]->isOptional)) {
                 $string .= ', ';
                 continue;
             }
@@ -170,7 +177,7 @@ final class CallbackType
             $string .= $this->parameters[$i] . ' ';
         }
 
-        if ($o) {
+        if ($o !== 0) {
             $string .= str_repeat(']', $o) . ' ';
         }
 

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -37,16 +37,16 @@ class StructureTemplateDataResponsePacket extends DataPacket{
 
 	protected function decodePayload() : void{
 		$this->structureTemplateName = $this->getString();
-		if($this->getBool()){
+		if((($this->get(1) !== "\x00"))){
 			$this->namedtag = $this->getRemaining();
 		}
 	}
 
 	protected function encodePayload() : void{
 		$this->putString($this->structureTemplateName);
-		$this->putBool($this->namedtag !== null);
+		($this->buffer .= ($this->namedtag !== null ? "\x01" : "\x00"));
 		if($this->namedtag !== null){
-			$this->put($this->namedtag);
+			($this->buffer .= $this->namedtag);
 		}
 	}
 

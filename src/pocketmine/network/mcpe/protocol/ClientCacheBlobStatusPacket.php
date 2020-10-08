@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use function count;
@@ -69,10 +69,10 @@ class ClientCacheBlobStatusPacket extends DataPacket/* implements ServerboundPac
 		$hitCount = $this->getUnsignedVarInt();
 		$missCount = $this->getUnsignedVarInt();
 		for($i = 0; $i < $hitCount; ++$i){
-			$this->hitHashes[] = $this->getLLong();
+			$this->hitHashes[] = (Binary::readLLong($this->get(8)));
 		}
 		for($i = 0; $i < $missCount; ++$i){
-			$this->missHashes[] = $this->getLLong();
+			$this->missHashes[] = (Binary::readLLong($this->get(8)));
 		}
 	}
 
@@ -80,10 +80,10 @@ class ClientCacheBlobStatusPacket extends DataPacket/* implements ServerboundPac
 		$this->putUnsignedVarInt(count($this->hitHashes));
 		$this->putUnsignedVarInt(count($this->missHashes));
 		foreach($this->hitHashes as $hash){
-			$this->putLLong($hash);
+			($this->buffer .= (\pack("VV", $hash & 0xFFFFFFFF, $hash >> 32)));
 		}
 		foreach($this->missHashes as $hash){
-			$this->putLLong($hash);
+			($this->buffer .= (\pack("VV", $hash & 0xFFFFFFFF, $hash >> 32)));
 		}
 	}
 

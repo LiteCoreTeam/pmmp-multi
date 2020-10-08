@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -38,11 +38,11 @@ class SimpleEventPacket extends DataPacket{
 	public $eventType;
 
 	protected function decodePayload(){
-		$this->eventType = $this->getLShort();
+		$this->eventType = ((\unpack("v", $this->get(2))[1]));
 	}
 
 	protected function encodePayload(){
-		$this->putLShort($this->eventType);
+		($this->buffer .= (\pack("v", $this->eventType)));
 	}
 
 	public function handle(NetworkSession $session) : bool{

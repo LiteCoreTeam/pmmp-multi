@@ -51,7 +51,7 @@ interface ClassLoader{
 	/**
 	 * Returns the parent ClassLoader, if any
 	 *
-	 * @return ClassLoader
+	 * @return ClassLoader|null
 	 */
 	public function getParent();
 

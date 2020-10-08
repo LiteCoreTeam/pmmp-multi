@@ -100,17 +100,17 @@
     },
     {
         "name": "pocketmine/binaryutils",
-        "version": "0.1.11",
-        "version_normalized": "0.1.11.0",
+        "version": "0.1.12",
+        "version_normalized": "0.1.12.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/BinaryUtils.git",
-            "reference": "e8cb65db1b7998eebb739b124f2a989fe87366eb"
+            "reference": "566fa87829e007eda0bd96e39fe20b9b0d638132"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/BinaryUtils/zipball/e8cb65db1b7998eebb739b124f2a989fe87366eb",
-            "reference": "e8cb65db1b7998eebb739b124f2a989fe87366eb",
+            "url": "https://api.github.com/repos/pmmp/BinaryUtils/zipball/566fa87829e007eda0bd96e39fe20b9b0d638132",
+            "reference": "566fa87829e007eda0bd96e39fe20b9b0d638132",
             "shasum": ""
         },
         "require": {
@@ -118,9 +118,11 @@
             "php-64bit": "*"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.8"
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.40",
+            "phpstan/phpstan-strict-rules": "^0.12.4"
         },
-        "time": "2020-01-28T12:09:56+00:00",
+        "time": "2020-08-28T20:43:21+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -136,17 +138,17 @@
     },
     {
         "name": "pocketmine/callback-validator",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/pmmp/CallbackValidator.git",
-            "reference": "4aef6bb25f97d0b830ba0b4f66834b1a9c86fc9a"
+            "url": "git@github.com:pmmp/CallbackValidator.git",
+            "reference": "8321aa3ccfe63639b0d08f0cbf270755cfc99fe2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/CallbackValidator/zipball/4aef6bb25f97d0b830ba0b4f66834b1a9c86fc9a",
-            "reference": "4aef6bb25f97d0b830ba0b4f66834b1a9c86fc9a",
+            "url": "https://api.github.com/repos/pmmp/CallbackValidator/zipball/8321aa3ccfe63639b0d08f0cbf270755cfc99fe2",
+            "reference": "8321aa3ccfe63639b0d08f0cbf270755cfc99fe2",
             "shasum": ""
         },
         "require": {
@@ -157,11 +159,14 @@
             "daverandom/callback-validator": "*"
         },
         "require-dev": {
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.38",
+            "phpstan/phpstan-strict-rules": "^0.12.4",
             "phpunit/phpunit": "^7.5 || ^8.5 || ^9.0"
         },
-        "time": "2020-03-17T12:04:22+00:00",
+        "time": "2020-08-21T19:51:42+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "DaveRandom\\CallbackValidator\\": "src/"
@@ -181,17 +186,17 @@
     },
     {
         "name": "pocketmine/classloader",
-        "version": "0.1.0",
-        "version_normalized": "0.1.0.0",
+        "version": "0.1.1",
+        "version_normalized": "0.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/ClassLoader.git",
-            "reference": "4ccdb30e48f030bfcad04bb0a208d198ec631993"
+            "reference": "7c0363491d1ce8f914fe96d41a4338c982adedff"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/ClassLoader/zipball/4ccdb30e48f030bfcad04bb0a208d198ec631993",
-            "reference": "4ccdb30e48f030bfcad04bb0a208d198ec631993",
+            "url": "https://api.github.com/repos/pmmp/ClassLoader/zipball/7c0363491d1ce8f914fe96d41a4338c982adedff",
+            "reference": "7c0363491d1ce8f914fe96d41a4338c982adedff",
             "shasum": ""
         },
         "require": {
@@ -203,9 +208,11 @@
             "pocketmine/spl": "<0.4"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.8"
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.38",
+            "phpstan/phpstan-strict-rules": "^0.12.4"
         },
-        "time": "2020-01-31T14:25:52+00:00",
+        "time": "2020-08-22T11:48:51+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -260,8 +267,8 @@
     },
     {
         "name": "pocketmine/log-pthreads",
-        "version": "0.1.0",
-        "version_normalized": "0.1.0.0",
+        "version": "0.1.1",
+        "version_normalized": "0.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/LogPthreads.git",
@@ -300,17 +307,17 @@
     },
     {
         "name": "pocketmine/math",
-        "version": "0.2.4",
-        "version_normalized": "0.2.4.0",
+        "version": "0.2.5",
+        "version_normalized": "0.2.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/Math.git",
-            "reference": "b1c28b236df8b795d7b06cf8421f9962b12ac410"
+            "reference": "8c46cfa95351fb0b2b30739a381310941934b55f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/Math/zipball/b1c28b236df8b795d7b06cf8421f9962b12ac410",
-            "reference": "b1c28b236df8b795d7b06cf8421f9962b12ac410",
+            "url": "https://api.github.com/repos/pmmp/Math/zipball/8c46cfa95351fb0b2b30739a381310941934b55f",
+            "reference": "8c46cfa95351fb0b2b30739a381310941934b55f",
             "shasum": ""
         },
         "require": {
@@ -318,9 +325,11 @@
             "php-64bit": "*"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.8"
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.40",
+            "phpstan/phpstan-strict-rules": "^0.12.4"
         },
-        "time": "2020-01-28T14:11:54+00:00",
+        "time": "2020-08-27T11:45:40+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -336,17 +345,17 @@
     },
     {
         "name": "pocketmine/nbt",
-        "version": "0.2.14",
-        "version_normalized": "0.2.14.0",
+        "version": "0.2.15",
+        "version_normalized": "0.2.15.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/NBT.git",
-            "reference": "b31dca98443328c4bab76dc1b84c1473c79be20e"
+            "reference": "f8a81d37d24eb79fb77d985a52549d68955bc6a1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/NBT/zipball/b31dca98443328c4bab76dc1b84c1473c79be20e",
-            "reference": "b31dca98443328c4bab76dc1b84c1473c79be20e",
+            "url": "https://api.github.com/repos/pmmp/NBT/zipball/f8a81d37d24eb79fb77d985a52549d68955bc6a1",
+            "reference": "f8a81d37d24eb79fb77d985a52549d68955bc6a1",
             "shasum": ""
         },
         "require": {
@@ -357,9 +366,11 @@
         },
         "require-dev": {
             "irstea/phpunit-shim": "^7.5 || ^8.0",
-            "phpstan/phpstan": "^0.12.11"
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.40",
+            "phpstan/phpstan-strict-rules": "^0.12.4"
         },
-        "time": "2020-04-15T11:29:25+00:00",
+        "time": "2020-08-28T15:11:32+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -375,17 +386,17 @@
     },
     {
         "name": "pocketmine/raklib",
-        "version": "0.12.8",
-        "version_normalized": "0.12.8.0",
+        "version": "0.12.9",
+        "version_normalized": "0.12.9.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/RakLib.git",
-            "reference": "9fea763ffc922db083e4528d4acd0b13d0ea83a4"
+            "reference": "5f2a02009f486ca4d90892814570fa13ebdc078d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/RakLib/zipball/9fea763ffc922db083e4528d4acd0b13d0ea83a4",
-            "reference": "9fea763ffc922db083e4528d4acd0b13d0ea83a4",
+            "url": "https://api.github.com/repos/pmmp/RakLib/zipball/5f2a02009f486ca4d90892814570fa13ebdc078d",
+            "reference": "5f2a02009f486ca4d90892814570fa13ebdc078d",
             "shasum": ""
         },
         "require": {
@@ -400,10 +411,10 @@
             "pocketmine/snooze": "^0.1.0"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.18",
+            "phpstan/phpstan": "0.12.40",
             "phpstan/phpstan-strict-rules": "^0.12.2"
         },
-        "time": "2020-03-31T17:28:28+00:00",
+        "time": "2020-08-28T15:22:57+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -419,17 +430,17 @@
     },
     {
         "name": "pocketmine/snooze",
-        "version": "0.1.2",
-        "version_normalized": "0.1.2.0",
+        "version": "0.1.3",
+        "version_normalized": "0.1.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/pmmp/Snooze.git",
-            "reference": "88420da3d9335dbcb3ee2decfd5e5453d057dcdf"
+            "reference": "849510fa62e57512b8467e3694e9b3add97038fd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pmmp/Snooze/zipball/88420da3d9335dbcb3ee2decfd5e5453d057dcdf",
-            "reference": "88420da3d9335dbcb3ee2decfd5e5453d057dcdf",
+            "url": "https://api.github.com/repos/pmmp/Snooze/zipball/849510fa62e57512b8467e3694e9b3add97038fd",
+            "reference": "849510fa62e57512b8467e3694e9b3add97038fd",
             "shasum": ""
         },
         "require": {
@@ -437,9 +448,11 @@
             "php-64bit": ">=7.2.0"
         },
         "require-dev": {
-            "phpstan/phpstan": "^0.12.8"
+            "phpstan/extension-installer": "^1.0",
+            "phpstan/phpstan": "0.12.40",
+            "phpstan/phpstan-strict-rules": "^0.12.4"
         },
-        "time": "2020-01-28T19:08:10+00:00",
+        "time": "2020-08-28T22:19:21+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {

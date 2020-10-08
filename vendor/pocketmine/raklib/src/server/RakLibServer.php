@@ -17,11 +17,11 @@ declare(strict_types=1);
 
 namespace raklib\server;
 
-use function error_get_last;
 use pocketmine\snooze\SleeperNotifier;
 use raklib\RakLib;
 use raklib\utils\InternetAddress;
 use function array_reverse;
+use function error_get_last;
 use function error_reporting;
 use function function_exists;
 use function gc_enable;
@@ -88,16 +88,12 @@ class RakLibServer extends \Thread{
 	/** @var int */
 	private $protocolVersion;
 
-	/** @var SleeperNotifier */
+	/** @var SleeperNotifier|null */
 	protected $mainThreadNotifier;
 
 	/**
-	 * @param \ThreadedLogger      $logger
 	 * @param string               $autoloaderPath Path to Composer autoloader
-	 * @param InternetAddress      $address
-	 * @param int                  $maxMtuSize
 	 * @param int|null             $overrideProtocolVersion Optional custom protocol version to use, defaults to current RakLib's protocol
-	 * @param SleeperNotifier|null $sleeper
 	 */
 	public function __construct(\ThreadedLogger $logger, string $autoloaderPath, InternetAddress $address, int $maxMtuSize = 1492, ?int $overrideProtocolVersion = null, ?SleeperNotifier $sleeper = null){
 		$this->address = $address;
@@ -135,7 +131,6 @@ class RakLibServer extends \Thread{
 
 	/**
 	 * Returns the RakNet server ID
-	 * @return int
 	 */
 	public function getServerId() : int{
 		return $this->serverId;
@@ -145,23 +140,14 @@ class RakLibServer extends \Thread{
 		return $this->protocolVersion;
 	}
 
-	/**
-	 * @return \ThreadedLogger
-	 */
 	public function getLogger() : \ThreadedLogger{
 		return $this->logger;
 	}
 
-	/**
-	 * @return \Threaded
-	 */
 	public function getExternalQueue() : \Threaded{
 		return $this->externalQueue;
 	}
 
-	/**
-	 * @return \Threaded
-	 */
 	public function getInternalQueue() : \Threaded{
 		return $this->internalQueue;
 	}
@@ -300,7 +286,6 @@ class RakLibServer extends \Thread{
 
 			set_error_handler([$this, "errorHandler"], E_ALL);
 			register_shutdown_function([$this, "shutdownHandler"]);
-
 
 			$socket = new UDPServerSocket($this->address);
 			new SessionManager($this, $socket, $this->maxMtuSize);

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\types\inventory\InventoryTransactionChangedSlotsHack;
@@ -76,7 +76,7 @@ class InventoryTransactionPacket extends DataPacket{
 
 		$this->transactionType = $this->getUnsignedVarInt();
 
-		$this->hasItemStackIds = $this->getBool();
+		$this->hasItemStackIds = (($this->get(1) !== "\x00"));
 
 		for($i = 0, $count = $this->getUnsignedVarInt(); $i < $count; ++$i){
 			$this->actions[] = $action = (new NetworkInventoryAction())->read($this, $this->hasItemStackIds);
@@ -129,7 +129,7 @@ class InventoryTransactionPacket extends DataPacket{
 
 		$this->putUnsignedVarInt($this->transactionType);
 
-		$this->putBool($this->hasItemStackIds);
+		($this->buffer .= ($this->hasItemStackIds ? "\x01" : "\x00"));
 
 		$this->putUnsignedVarInt(count($this->actions));
 		foreach($this->actions as $action){

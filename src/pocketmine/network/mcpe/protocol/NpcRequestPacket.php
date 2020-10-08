@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -48,16 +48,16 @@ class NpcRequestPacket extends DataPacket{
 
 	protected function decodePayload(){
 		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		$this->requestType = $this->getByte();
+		$this->requestType = (\ord($this->get(1)));
 		$this->commandString = $this->getString();
-		$this->actionType = $this->getByte();
+		$this->actionType = (\ord($this->get(1)));
 	}
 
 	protected function encodePayload(){
 		$this->putEntityRuntimeId($this->entityRuntimeId);
-		$this->putByte($this->requestType);
+		($this->buffer .= \chr($this->requestType));
 		$this->putString($this->commandString);
-		$this->putByte($this->actionType);
+		($this->buffer .= \chr($this->actionType));
 	}
 
 	public function handle(NetworkSession $session) : bool{

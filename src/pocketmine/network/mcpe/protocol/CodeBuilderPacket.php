@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -52,12 +52,12 @@ class CodeBuilderPacket extends DataPacket/* implements ClientboundPacket*/{
 
 	protected function decodePayload() : void{
 		$this->url = $this->getString();
-		$this->openCodeBuilder = $this->getBool();
+		$this->openCodeBuilder = (($this->get(1) !== "\x00"));
 	}
 
 	protected function encodePayload() : void{
 		$this->putString($this->url);
-		$this->putBool($this->openCodeBuilder);
+		($this->buffer .= ($this->openCodeBuilder ? "\x01" : "\x00"));
 	}
 
 	public function handle(NetworkSession $handler) : bool{

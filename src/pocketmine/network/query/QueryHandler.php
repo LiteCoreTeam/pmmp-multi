@@ -92,7 +92,7 @@ class QueryHandler{
 	}
 
 	public static function getTokenString(string $token, string $salt) : int{
-		return Binary::readInt(substr(hash("sha512", $salt . ":" . $token, true), 7, 4));
+		return (\unpack("N", substr(hash("sha512", $salt . ":" . $token, true), 7, 4))[1] << 32 >> 32);
 	}
 
 	/**
@@ -101,26 +101,26 @@ class QueryHandler{
 	public function handle(AdvancedSourceInterface $interface, string $address, int $port, string $packet){
 		$offset = 2;
 		$packetType = ord($packet[$offset++]);
-		$sessionID = Binary::readInt(substr($packet, $offset, 4));
+		$sessionID = (\unpack("N", substr($packet, $offset, 4))[1] << 32 >> 32);
 		$offset += 4;
 		$payload = substr($packet, $offset);
 
 		switch($packetType){
 			case self::HANDSHAKE: //Handshake
 				$reply = chr(self::HANDSHAKE);
-				$reply .= Binary::writeInt($sessionID);
+				$reply .= (\pack("N", $sessionID));
 				$reply .= self::getTokenString($this->token, $address) . "\x00";
 
 				$interface->sendRawPacket($address, $port, $reply);
 				break;
 			case self::STATISTICS: //Stat
-				$token = Binary::readInt(substr($payload, 0, 4));
+				$token = (\unpack("N", substr($payload, 0, 4))[1] << 32 >> 32);
 				if($token !== ($t1 = self::getTokenString($this->token, $address)) and $token !== ($t2 = self::getTokenString($this->lastToken, $address))){
 					$this->debug("Bad token $token from $address $port, expected $t1 or $t2");
 					break;
 				}
 				$reply = chr(self::STATISTICS);
-				$reply .= Binary::writeInt($sessionID);
+				$reply .= (\pack("N", $sessionID));
 
 				if(strlen($payload) === 8){
 					$reply .= $this->server->getQueryInformation()->getLongQuery();

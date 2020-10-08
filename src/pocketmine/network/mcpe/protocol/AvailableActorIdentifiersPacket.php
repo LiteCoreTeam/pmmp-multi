@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use function file_get_contents;
@@ -42,11 +42,7 @@ class AvailableActorIdentifiersPacket extends DataPacket{
 	}
 
 	protected function encodePayload(){
-		$this->put(
-			$this->namedtag ??
-			self::$DEFAULT_NBT_CACHE ??
-			(self::$DEFAULT_NBT_CACHE = file_get_contents(\pocketmine\RESOURCE_PATH . '/vanilla/entity_identifiers.nbt'))
-		);
+		($this->buffer .=  			$this->namedtag ?? 			self::$DEFAULT_NBT_CACHE ?? 			(self::$DEFAULT_NBT_CACHE = file_get_contents(\pocketmine\RESOURCE_PATH . '/vanilla/entity_identifiers.nbt')) 		);
 	}
 
 	public function handle(NetworkSession $session) : bool{

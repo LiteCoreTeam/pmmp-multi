@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -58,13 +58,13 @@ class TickSyncPacket extends DataPacket/* implements ClientboundPacket, Serverbo
 	}
 
 	protected function decodePayload() : void{
-		$this->clientSendTime = $this->getLLong();
-		$this->serverReceiveTime = $this->getLLong();
+		$this->clientSendTime = (Binary::readLLong($this->get(8)));
+		$this->serverReceiveTime = (Binary::readLLong($this->get(8)));
 	}
 
 	protected function encodePayload() : void{
-		$this->putLLong($this->clientSendTime);
-		$this->putLLong($this->serverReceiveTime);
+		($this->buffer .= (\pack("VV", $this->clientSendTime & 0xFFFFFFFF, $this->clientSendTime >> 32)));
+		($this->buffer .= (\pack("VV", $this->serverReceiveTime & 0xFFFFFFFF, $this->serverReceiveTime >> 32)));
 	}
 
 	public function handle(NetworkSession $handler) : bool{

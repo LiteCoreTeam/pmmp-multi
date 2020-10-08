@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 
@@ -44,11 +44,11 @@ class ClientCacheStatusPacket extends DataPacket/* implements ServerboundPacket*
 	}
 
 	protected function decodePayload() : void{
-		$this->enabled = $this->getBool();
+		$this->enabled = (($this->get(1) !== "\x00"));
 	}
 
 	protected function encodePayload() : void{
-		$this->putBool($this->enabled);
+		($this->buffer .= ($this->enabled ? "\x01" : "\x00"));
 	}
 
 	public function handle(NetworkSession $handler) : bool{

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\types\StructureEditorData;
@@ -45,13 +45,13 @@ class StructureBlockUpdatePacket extends DataPacket/* implements ServerboundPack
 	protected function decodePayload(){
 		$this->getBlockPosition($this->x, $this->y, $this->z);
 		$this->structureEditorData = $this->getStructureEditorData();
-		$this->isPowered = $this->getBool();
+		$this->isPowered = (($this->get(1) !== "\x00"));
 	}
 
 	protected function encodePayload(){
 		$this->putBlockPosition($this->x, $this->y, $this->z);
 		$this->putStructureEditorData($this->structureEditorData);
-		$this->putBool($this->isPowered);
+		($this->buffer .= ($this->isPowered ? "\x01" : "\x00"));
 	}
 
 	public function handle(NetworkSession $session) : bool{

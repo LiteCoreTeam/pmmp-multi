@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-#include <rules/DataPacket.h>
+use pocketmine\utils\Binary;
 
 use pocketmine\network\mcpe\NetworkSession;
 use function count;
@@ -104,10 +104,10 @@ class LevelChunkPacket extends DataPacket/* implements ClientboundPacket*/{
 		$this->chunkX = $this->getVarInt();
 		$this->chunkZ = $this->getVarInt();
 		$this->subChunkCount = $this->getUnsignedVarInt();
-		$this->cacheEnabled = $this->getBool();
+		$this->cacheEnabled = (($this->get(1) !== "\x00"));
 		if($this->cacheEnabled){
 			for($i =  0, $count = $this->getUnsignedVarInt(); $i < $count; ++$i){
-				$this->usedBlobHashes[] = $this->getLLong();
+				$this->usedBlobHashes[] = (Binary::readLLong($this->get(8)));
 			}
 		}
 		$this->extraPayload = $this->getString();
@@ -117,11 +117,11 @@ class LevelChunkPacket extends DataPacket/* implements ClientboundPacket*/{
 		$this->putVarInt($this->chunkX);
 		$this->putVarInt($this->chunkZ);
 		$this->putUnsignedVarInt($this->subChunkCount);
-		$this->putBool($this->cacheEnabled);
+		($this->buffer .= ($this->cacheEnabled ? "\x01" : "\x00"));
 		if($this->cacheEnabled){
 			$this->putUnsignedVarInt(count($this->usedBlobHashes));
 			foreach($this->usedBlobHashes as $hash){
-				$this->putLLong($hash);
+				($this->buffer .= (\pack("VV", $hash & 0xFFFFFFFF, $hash >> 32)));
 			}
 		}
 		$this->putString($this->extraPayload);

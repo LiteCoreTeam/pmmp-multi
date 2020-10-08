@@ -131,7 +131,11 @@ class LevelDB extends BaseLevelProvider{
 			throw new LevelException("Truncated level.dat");
 		}
 		$nbt = new LittleEndianNBTStream();
-		$levelData = $nbt->read(substr($rawLevelData, 8));
+		try{
+			$levelData = $nbt->read(substr($rawLevelData, 8));
+		}catch(\UnexpectedValueException $e){
+			throw new LevelException("Invalid level.dat (" . $e->getMessage() . ")", 0, $e);
+		}
 		if($levelData instanceof CompoundTag){
 			$this->levelData = $levelData;
 		}else{
@@ -250,7 +254,7 @@ class LevelDB extends BaseLevelProvider{
 
 		$nbt = new LittleEndianNBTStream();
 		$buffer = $nbt->write($levelData);
-		file_put_contents($path . "level.dat", Binary::writeLInt(self::CURRENT_STORAGE_VERSION) . Binary::writeLInt(strlen($buffer)) . $buffer);
+		file_put_contents($path . "level.dat", (\pack("V", self::CURRENT_STORAGE_VERSION)) . (\pack("V", strlen($buffer))) . $buffer);
 
 		$db = self::createDB($path);
 
@@ -276,7 +280,7 @@ class LevelDB extends BaseLevelProvider{
 
 		$nbt = new LittleEndianNBTStream();
 		$buffer = $nbt->write($this->levelData);
-		file_put_contents($this->getPath() . "level.dat", Binary::writeLInt(self::CURRENT_STORAGE_VERSION) . Binary::writeLInt(strlen($buffer)) . $buffer);
+		file_put_contents($this->getPath() . "level.dat", (\pack("V", self::CURRENT_STORAGE_VERSION)) . (\pack("V", strlen($buffer))) . $buffer);
 	}
 
 	public function getGenerator() : string{
@@ -536,7 +540,7 @@ class LevelDB extends BaseLevelProvider{
 	}
 
 	public static function chunkIndex(int $chunkX, int $chunkZ) : string{
-		return Binary::writeLInt($chunkX) . Binary::writeLInt($chunkZ);
+		return (\pack("V", $chunkX)) . (\pack("V", $chunkZ));
 	}
 
 	private function chunkExists(int $chunkX, int $chunkZ) : bool{

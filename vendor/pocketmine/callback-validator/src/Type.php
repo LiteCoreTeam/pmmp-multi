@@ -115,6 +115,8 @@ abstract class Type
         // In weak mode, allow castable scalars as long as nullability matches (invariant)
         return $this->isWeak
             && $nullable === $this->isNullable
-            && MatchTester::isWeakScalarMatch($typeName, $this->typeName);
+	    && $typeName !== null
+	    && $this->typeName !== null
+	    && MatchTester::isWeakScalarMatch($typeName, $this->typeName);
     }
 }
