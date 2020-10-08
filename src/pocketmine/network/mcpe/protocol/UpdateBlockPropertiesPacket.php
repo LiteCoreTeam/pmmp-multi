@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-use pocketmine\utils\Binary;
+#include <rules/DataPacket.h>
 
 use pocketmine\nbt\NetworkLittleEndianNBTStream;
 use pocketmine\nbt\tag\CompoundTag;
@@ -46,7 +46,7 @@ class UpdateBlockPropertiesPacket extends DataPacket{
 	}
 
 	protected function encodePayload() : void{
-		($this->buffer .= $this->nbt);
+		$this->put($this->nbt);
 	}
 
 	public function handle(NetworkSession $handler) : bool{

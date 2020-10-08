@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\network\mcpe\protocol;
 
-use pocketmine\utils\Binary;
+#include <rules/DataPacket.h>
 
 use pocketmine\inventory\FurnaceRecipe;
 use pocketmine\inventory\ShapedRecipe;
@@ -34,6 +34,9 @@ use pocketmine\network\mcpe\NetworkBinaryStream;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\types\PotionContainerChangeRecipe;
 use pocketmine\network\mcpe\protocol\types\PotionTypeRecipe;
+#ifndef COMPILE
+use pocketmine\utils\Binary;
+#endif
 use function count;
 use function str_repeat;
 
@@ -161,7 +164,7 @@ class CraftingDataPacket extends DataPacket{
 			$output = $this->getVarInt();
 			$this->potionContainerRecipes[] = new PotionContainerChangeRecipe($input, $ingredient, $output);
 		}
-		$this->cleanRecipes = (($this->get(1) !== "\x00"));
+		$this->cleanRecipes = $this->getBool();
 	}
 
 	/**
@@ -181,7 +184,7 @@ class CraftingDataPacket extends DataPacket{
 	}
 
 	private static function writeShapelessRecipe(ShapelessRecipe $recipe, NetworkBinaryStream $stream, int $pos) : int{
-		$stream->putString((\pack("N", $pos))); //some kind of recipe ID, doesn't matter what it is as long as it's unique
+		$stream->putString(Binary::writeInt($pos)); //some kind of recipe ID, doesn't matter what it is as long as it's unique
 		$stream->putUnsignedVarInt($recipe->getIngredientCount());
 		foreach($recipe->getIngredientList() as $item){
 			$stream->putRecipeIngredient($item);
@@ -202,7 +205,7 @@ class CraftingDataPacket extends DataPacket{
 	}
 
 	private static function writeShapedRecipe(ShapedRecipe $recipe, NetworkBinaryStream $stream, int $pos) : int{
-		$stream->putString((\pack("N", $pos))); //some kind of recipe ID, doesn't matter what it is as long as it's unique
+		$stream->putString(Binary::writeInt($pos)); //some kind of recipe ID, doesn't matter what it is as long as it's unique
 		$stream->putVarInt($recipe->getWidth());
 		$stream->putVarInt($recipe->getHeight());
 
@@ -268,7 +271,7 @@ class CraftingDataPacket extends DataPacket{
 			$entryType = self::writeEntry($d, $writer, $counter++);
 			if($entryType >= 0){
 				$this->putVarInt($entryType);
-				($this->buffer .= $writer->getBuffer());
+				$this->put($writer->getBuffer());
 			}else{
 				$this->putVarInt(-1);
 			}
@@ -291,7 +294,7 @@ class CraftingDataPacket extends DataPacket{
 			$this->putVarInt($recipe->getOutputItemId());
 		}
 
-		($this->buffer .= ($this->cleanRecipes ? "\x01" : "\x00"));
+		$this->putBool($this->cleanRecipes);
 	}
 
 	public function handle(NetworkSession $session) : bool{

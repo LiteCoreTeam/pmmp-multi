@@ -1949,7 +1949,7 @@ abstract class Entity extends Location implements Metadatable, EntityIds{
 		if(
 			!isset($this->hasSpawned[$player->getLoaderId()]) and
 			$this->chunk !== null and
-			isset($player->usedChunks[$chunkHash = ((($this->chunk->getX()) & 0xFFFFFFFF) << 32) | (( $this->chunk->getZ()) & 0xFFFFFFFF)]) and
+			isset($player->usedChunks[$chunkHash = Level::chunkHash($this->chunk->getX(), $this->chunk->getZ())]) and
 			$player->usedChunks[$chunkHash] === true
 		){
 			$this->hasSpawned[$player->getLoaderId()] = $player;

@@ -159,7 +159,7 @@ abstract class Timezone{
 					return trim($data['ZONE']);
 				}
 
-				//Portable method for incompatible 1 distributions.
+				//Portable method for incompatible linux distributions.
 
 				$offset = trim(exec('date +%:z'));
 

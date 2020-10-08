@@ -1034,7 +1034,7 @@ class Server{
 				$distance = $X ** 2 + $Z ** 2;
 				$chunkX = $X + $centerX;
 				$chunkZ = $Z + $centerZ;
-				$index = ((($chunkX) & 0xFFFFFFFF) << 32) | (( $chunkZ) & 0xFFFFFFFF);
+				$index = Level::chunkHash($chunkX, $chunkZ);
 				$order[$index] = $distance;
 			}
 		}
@@ -1042,7 +1042,7 @@ class Server{
 		asort($order);
 
 		foreach($order as $index => $distance){
-			 $chunkX = ($index >> 32);  $chunkZ = ($index & 0xFFFFFFFF) << 32 >> 32;
+			Level::getXZ($index, $chunkX, $chunkZ);
 			$level->populateChunk($chunkX, $chunkZ, true);
 		}
 
